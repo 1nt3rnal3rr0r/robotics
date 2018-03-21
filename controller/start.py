@@ -17,7 +17,9 @@ def print_messages():
 @app.route('/message', methods=['POST'])
 def message():
     data = request.get_json()
-    if data and 'message' in data and len(data['message']) > 0:
+    if data and 'message' in data and len(data['message']) > 0 \
+            and 'language' in data and len(data['language']) > 0:
+        print(data['language'])
         messages.put(data['message'])
         return jsonify({'success': True, 'message': 'Message received.'})
     else:
@@ -31,4 +33,4 @@ def hello():
 
 if __name__ == "__main__":
     print_messages()
-    app.run(host='0.0.0.0', port=4000, threaded=True)
+    app.run(host='0.0.0.0', ssl_context='adhoc', port=4000, threaded=True)
