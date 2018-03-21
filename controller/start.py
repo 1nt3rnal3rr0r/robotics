@@ -3,31 +3,40 @@ from flask_cors import CORS
 import threading
 import queue
 from time import sleep
+from ev3dev.ev3 import *
 
 app = Flask(__name__)
 messages = queue.Queue()
 CORS(app)
 
 whiteApproximation = 180
+timeT = 300
+speed = 100
+speedBackwards = -100
 
-isPrinting = False
 
-xMotor = LargeMotor('out2')
-yMotor = LargeMotor('out3')
-zMotor = LargeMotor('out1')
+xMotor = LargeMotor('outA')
+yMotor = LargeMotor('outB')
+zMotor = MediumMotor('outC')
 
-colorSensor = ColorSensor('outB')
-colorSensor.mode = 'RGB-RAW'
+touchSensor = TouchSensor('inA')
+
 
 
 def print_messages():
     threading.Timer(1, print_messages).start()
-    if colorSensor.value(0)>whiteApproximation and colorSensor.value(1)>whiteApproximation and colorSensor.value(2)>whiteApproximation:
-        while not messages.empty():
-            if(not isPrinting):
-                isPrinting = True
-                printA()
-                parseText(messages.get())
+    isPrinting = False
+
+    print("print_message")
+    if (not isPrinting):
+        printA()
+        isPrinting = True
+
+    while not messages.empty():
+        if(not isPrinting):
+            isPrinting = True
+            printA()
+            parseText(messages.get())
 
 def parseText(text):
     for letter in text:
@@ -87,57 +96,328 @@ def parseText(text):
     isPrinting = True
 
 def printA():
-    xMotor.run_timed(time_sp=300, speed_sp=50)
-    sleep(1)
+    #pen on paper
+
+    xMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT/1000)
+    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
+    sleep(timeT/1000)
+    xMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
+    sleep(timeT/1000)
+    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT/1000)
+    xMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT / 1000)
+    yMotor.run_timed(time_sp=timeT/6, speed_sp=speed)
+    sleep(timeT / 6000)
+    yMotor.run_timed(time_sp=timeT / 3 + timeT, speed_sp=speedBackwards)
+    sleep(timeT / 3000 + timeT)
+
+    #spacing
     print ("A")
 
 def printB():
+    #pen on paper
+
+    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT/1000)
+    xMotor.run_timed(time_sp=timeT/2, speed_sp=speed)
+    sleep(timeT/2000)
+    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
+    sleep(timeT/1000)
+    xMotor.run_timed(time_sp=timeT/2, speed_sp=speedBackwards)
+    sleep(timeT/2000)
+
+    #spacing
+
+    #pen away from the paper
     print ("B")
 
 def printC():
+    #pen on paper
+
+    xMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT/1000)
+    xMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
+    sleep(timeT/1000)
+    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT/1000)
+    xMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT / 1000)
+
+    # spacing
+
+    # pen away from the paper
     print ("C")
 
 def printD():
+    #pen on paper
+    yMotor.run_timed(time_sp=timeT/2, speed_sp=speed)
+    sleep(timeT / 2000)
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 2000)
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 2000)
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
+
+    # spacing
+
+    # pen away from the paper
+
     print ("D")
 
 def printE():
-    print ("D")
+
+    #-
+    xMotor.run_timed(time_sp=timeT / 3, speed_sp=speed)
+    sleep(timeT / 3000)
+    xMotor.run_timed(time_sp=timeT / 3, speed_sp=speedBackwards)
+    sleep(timeT / 3000)
+
+    #|
+    yMotor.run_timed(time_sp=timeT / 3, speed_sp=speed)
+    sleep(timeT / 3000)
+
+    #-
+    xMotor.run_timed(time_sp=timeT / 3, speed_sp=speed)
+    sleep(timeT / 3000)
+    xMotor.run_timed(time_sp=timeT / 3, speed_sp=speedBackwards)
+    sleep(timeT / 3000)
+
+    # |
+    yMotor.run_timed(time_sp=timeT / 3, speed_sp=speed)
+    sleep(timeT / 3000)
+
+    #-
+    xMotor.run_timed(time_sp=timeT / 3, speed_sp=speed)
+    sleep(timeT / 3000)
+    xMotor.run_timed(time_sp=timeT / 3, speed_sp=speedBackwards)
+    sleep(timeT / 3000)
+    print ("E")
 
 def printF():
-    print ("D")
+    # -
+    xMotor.run_timed(time_sp=timeT / 3, speed_sp=speed)
+    sleep(timeT / 3000)
+    xMotor.run_timed(time_sp=timeT / 3, speed_sp=speedBackwards)
+    sleep(timeT / 3000)
+
+    # |
+    yMotor.run_timed(time_sp=timeT / 3, speed_sp=speed)
+    sleep(timeT / 3000)
+
+    # -
+    xMotor.run_timed(time_sp=timeT / 3, speed_sp=speed)
+    sleep(timeT / 3000)
+    xMotor.run_timed(time_sp=timeT / 3, speed_sp=speedBackwards)
+    sleep(timeT / 3000)
+
+    # |
+    yMotor.run_timed(time_sp=timeT / 3, speed_sp=speed)
+    sleep(timeT / 3000)
+
+    print ("F")
 
 def printG():
-    print ("D")
+    #|
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 2000)
+
+    #-
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 2000)
+
+    #|
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
+
+    #-
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
+
+    #|
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
+
+    #-
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 2000)
+    print ("G")
 
 def printH():
-    print ("D")
+    # |
+    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT / 1000)
+    # |
+    yMotor.run_timed(time_sp=timeT/2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
+    # -
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 2000)
+    # |
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
+    # |
+    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT / 1000)
+    print ("H")
 
 def printI():
-    print ("D")
+    # |
+    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT / 1000)
+    print ("I")
 
 def printJ():
-    print ("D")
+    # |
+    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT / 1000)
+
+    # -
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 2000)
+
+    print ("J")
 
 def printK():
-    print("D")
+    # |
+    yMotor.run_timed(time_sp=timeT/2, speed_sp=speed)
+    sleep(timeT / 2000)
+
+    # /
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 1000)
+
+    # /
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 1000)
+
+    # |
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 2000)
+
+    # |
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
+
+    # \
+    printBackSlash()
+
+    print("K")
 
 def printL():
-    print("D")
+    # |
+    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT / 1000)
+
+    # -
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
+
+    print("L")
 
 def printM():
-    print("D")
+    # |
+    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT / 1000)
+
+    # |
+    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
+    sleep(timeT / 1000)
+
+    # \
+    printBackSlash()
+
+    # /
+    printFrontSlash()
+
+    # |
+    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT / 1000)
+
+    print("M")
 
 def printN():
-    print("D")
+    # |
+    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT / 1000)
+
+    # |
+    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
+    sleep(timeT / 1000)
+
+    # \
+    xMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT / 1000)
+
+    # |
+    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT / 1000)
+    print("N")
 
 def printO():
-    print("D")
+    # |
+    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT / 1000)
+
+    # -
+    xMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT / 1000)
+
+    # |
+    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
+    sleep(timeT / 1000)
+
+    # -
+    xMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
+    sleep(timeT / 1000)
+    print("O")
 
 def printP():
-    print("D")
+    # |
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 2000)
+
+    # -
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 2000)
+
+    # |
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
+
+    # -
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
+
+    # |
+    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
+    sleep(timeT / 1000)
+    print("P")
 
 def printQ():
-    print("D")
+    printO()
+    # |
+    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT / 1000)
+
+    # -
+    xMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT / 1000)
+
+    # \
+    yMotor.run_timed(time_sp=timeT / 3, speed_sp=speed)
+    xMotor.run_timed(time_sp=timeT / 3, speed_sp=speed)
+    sleep(timeT / 3000)
+    print("Q")
 
 def printR():
     print("D")
@@ -166,6 +446,19 @@ def printY():
 def printZ():
     print("D")
 
+def printBackSlash():
+    # \
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 1000)
+
+#/
+def printFrontSlash():
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 1000)
+
+
 @app.route('/message', methods=['POST'])
 def message():
     data = request.get_json()
@@ -183,4 +476,4 @@ def hello():
 
 if __name__ == "__main__":
     print_messages()
-    app.run(host='0.0.0.0', port=4000, threaded=True)
+   # app.run(host='0.0.0.0', port=4000, threaded=True)
