@@ -459,11 +459,13 @@ def printFrontSlash():
     sleep(timeT / 1000)
 
 
+# en-US
+# bg-BG
 @app.route('/message', methods=['POST'])
 def message():
     data = request.get_json()
     if data and 'message' in data and len(data['message']) > 0 \
-            and 'language' in data and len(data['language']) > 0:
+            and 'language' in data and data['language'] == 'en-US' or data['language'] == 'bg-BG':
         print(data['language'])
         messages.put(data['message'])
         return jsonify({'success': True, 'message': 'Message received.'})
