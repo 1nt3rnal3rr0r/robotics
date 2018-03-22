@@ -5,7 +5,7 @@ import queue
 from time import sleep
 from ev3dev.ev3 import *
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='react_build', static_url_path='')
 messages = queue.Queue()
 CORS(app)
 
@@ -473,9 +473,9 @@ def message():
 
 @app.route('/')
 def hello():
-    return 'Hello!'
+    return app.send_static_file('index.html')
 
 
 if __name__ == "__main__":
-    print_messages()
-    # app.run(host='0.0.0.0', ssl_context='adhoc', port=4000, threaded=True)
+    # print_messages()
+    app.run(host='0.0.0.0', ssl_context='adhoc', port=4000, threaded=True)
