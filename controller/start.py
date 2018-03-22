@@ -4,6 +4,7 @@ import threading
 import queue
 from time import sleep
 from ev3dev.ev3 import *
+from message import Message
 
 app = Flask(__name__, static_folder='react_build', static_url_path='')
 messages = queue.Queue()
@@ -38,6 +39,8 @@ def print_messages():
             printA()
             parseText(messages.get())
 
+# access text language with text.get_language()
+# access text content with text.get_content() because they are objects now
 def parseText(text):
     for letter in text:
         if(letter == 'a' or letter == 'A'):
@@ -466,8 +469,7 @@ def message():
     data = request.get_json()
     if data and 'message' in data and len(data['message']) > 0 \
             and 'language' in data and data['language'] == 'en-US' or data['language'] == 'bg-BG':
-        print(data['language'])
-        messages.put(data['message'])
+        messages.put(Message(data['language'], data['message']))
         return jsonify({'success': True, 'message': 'Message received.'})
     else:
         return jsonify({'success': False, 'message': 'Invalid request.'})
