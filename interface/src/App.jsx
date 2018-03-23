@@ -11,22 +11,8 @@ import AppBar from 'material-ui/AppBar';
 
 import AutomaticInput from './AutomaticInput';
 import ManualInput from './ManualInput';
-
-const styles = {
-  root: {
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    alignContent: 'center',
-    textAlign: 'center',
-    overflow: 'auto',
-    flexShrink: 0,
-  },
-  button: {
-    marginTop: '1em',
-  },
-};
+import UpgradeMessage from './UpgradeMessage';
+import styles from './app.styles';
 
 class App extends Component {
   static getTheme() {
@@ -81,7 +67,9 @@ class App extends Component {
               <Tab label="Ръчно диктуване" />
             </Tabs>
           </AppBar>
-          {tabValue === 0 && <AutomaticInput sendMessage={App.sendMessage} />}
+          {tabValue === 0 &&
+            'webkitSpeechRecognition' in window && <AutomaticInput sendMessage={App.sendMessage} />}
+          {tabValue === 0 && !('webkitSpeechRecognition' in window) && <UpgradeMessage />}
           {tabValue === 1 && <ManualInput sendMessage={App.sendMessage} />}
         </Paper>
       </MuiThemeProvider>

@@ -6,20 +6,7 @@ import PropTypes from 'prop-types';
 
 import LanguageSelector from './LanguageSelector';
 import { EN_LANG } from './constants';
-
-const styles = {
-  root: {
-    margin: 'auto',
-    flexShrink: 0,
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'column',
-    overflow: 'auto',
-  },
-  button: {
-    marginTop: '1em',
-  },
-};
+import styles from './content.styles';
 
 class AutomaticInput extends Component {
   constructor(props) {
