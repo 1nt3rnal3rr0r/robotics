@@ -3,7 +3,7 @@ import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/Menu/MenuItem';
 import PropTypes from 'prop-types';
 
-import { BG_LANG, EN_LANG } from './constants';
+import { BG_LANG, EN_LANG } from '../constants';
 
 const LanguageSelector = ({ language, handleLanguageChange }) => (
   <TextField

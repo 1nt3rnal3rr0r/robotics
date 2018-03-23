@@ -9,9 +9,9 @@ import axios from 'axios';
 import Tabs, { Tab } from 'material-ui/Tabs';
 import AppBar from 'material-ui/AppBar';
 
-import AutomaticInput from './AutomaticInput';
-import ManualInput from './ManualInput';
-import UpgradeMessage from './UpgradeMessage';
+import AutomaticInput from '../AutomaticInput';
+import ManualInput from '../ManualInput';
+import UpgradeMessage from '../UpgradeMessage';
 import styles from './app.styles';
 
 class App extends Component {

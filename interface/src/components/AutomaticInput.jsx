@@ -5,7 +5,7 @@ import { withStyles } from 'material-ui/styles';
 import PropTypes from 'prop-types';
 
 import LanguageSelector from './LanguageSelector';
-import { EN_LANG } from './constants';
+import { EN_LANG } from '../constants';
 import styles from './content.styles';
 
 class AutomaticInput extends Component {

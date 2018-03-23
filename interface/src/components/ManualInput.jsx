@@ -5,7 +5,7 @@ import { withStyles } from 'material-ui/styles';
 import PropTypes from 'prop-types';
 
 import LanguageSelector from './LanguageSelector';
-import { BULGARIAN_SYMBOLS, ENGLISH_SYMBOLS, BG_LANG, EN_LANG } from './constants';
+import { BULGARIAN_SYMBOLS, ENGLISH_SYMBOLS, BG_LANG, EN_LANG } from '../constants';
 import styles from './content.styles';
 
 class ManualInput extends Component {
@@ -73,7 +73,7 @@ class ManualInput extends Component {
           className={classes.button}
           onClick={() => this.props.sendMessage(this.state.manualMessage, this.state.language)}
         >
-          Изпрати ръчно въведения текст
+          Изпрати текста
         </Button>
       </div>
     );
