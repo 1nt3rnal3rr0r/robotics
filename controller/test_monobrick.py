@@ -21,12 +21,29 @@ app = Flask(__name__, static_folder='react_build', static_url_path='')
 messages = queue.Queue()
 CORS(app)
 
+alphabet = {'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ж': 'j', 'з': 'z',
+            'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o', 'п': 'p',
+            'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h', 'ц': 'c', 'ч': 'ch',
+            'ш': 'sh', 'щ': 'sht', 'ъ': 'u', 'ь': 'i', 'ю': 'iu', 'я': 'ya'}
+BG = 'bg-BG'
+EN = 'en-US'
+
 
 def send_letter(letter):
     try:
-        brick.Mailbox.Send('Letter', letter.lower(), False)
+        # letter can consist of multiple symbols
+        for char in letter:
+            brick.Mailbox.Send('Letter', char, False)
     except Exception as e:
         print(e)
+
+
+def translate_letter(letter, lang):
+    let = letter.lower()
+    if lang == BG:
+        return alphabet[let].lower()
+    else:
+        return let
 
 
 def connect():
@@ -54,16 +71,19 @@ def print_messages():
         return
 
     while not messages.empty():
-        msg = messages.get().get_content()
-        for char in msg:
-            send_letter(char)
+        msg = messages.get()
+        content = msg.get_content()
+        language = msg.get_language()
+        for char in content:
+            translated = translate_letter(char, language)
+            send_letter(translated)
 
 
 @app.route('/message', methods=['POST'])
 def message():
     data = request.get_json()
     if data and 'message' in data and len(data['message']) > 0 \
-            and 'language' in data and data['language'] == 'en-US':
+            and 'language' in data and (data['language'] == EN or data['language'] == BG):
         messages.put(Message(data['language'], data['message']))
         return jsonify({'success': True, 'message': 'Message received.'})
     else:
