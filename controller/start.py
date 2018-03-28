@@ -18,10 +18,10 @@ def print_message(msg, lang):
     print(msg)
 
     # go at the beginning of the page
-    # letters.beginningOfThePage()
-    print('print_message')
+    letters.beginningOfThePage()
+    #print('print_message')
 
-    # parse_text(msg)
+    parse_text(msg)
 
 
 def parse_text(text):
@@ -29,7 +29,7 @@ def parse_text(text):
 
     for letter in text:
         if lettersPrinted % lettersPerLine == 0:
-            letter.newLine()
+            letters.newLine()
         else:
             if letter == 'a' or letter == 'A':
                 letters.printA()
