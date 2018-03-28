@@ -122,4 +122,4 @@ def hello():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', ssl_context='adhoc', port=4000, threaded=False)
+    app.run(host='0.0.0.0', ssl_context=('cert.pem', 'key.pem'), port=4000, threaded=False)
