@@ -482,4 +482,4 @@ def hello():
 
 if __name__ == "__main__":
     # print_messages()
-    app.run(host='0.0.0.0', ssl_context='adhoc', port=4000, threaded=True)
+    app.run(host='0.0.0.0', ssl_context='adhoc', port=4000, threaded=False)
