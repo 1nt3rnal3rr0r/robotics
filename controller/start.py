@@ -1,13 +1,9 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import threading
-import queue
 from time import sleep
 from ev3dev.ev3 import *
-from message import Message
 
 app = Flask(__name__, static_folder='react_build', static_url_path='')
-messages = queue.Queue()
 CORS(app)
 
 whiteApproximation = 180
@@ -26,15 +22,16 @@ touchSensor = TouchSensor('inA')
 
 atBeginning = False
 
-def print_messages():
+
+def print_message(msg, lang):
     global atBeginning
+    print(msg)
+    print(lang)
 
-   #go at the beginning of the page
-    beginningOfThePage()
+    # go at the beginning of the page
+    # beginningOfThePage()
 
-    print("print_message")
-
-    parseText("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    # parseText("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
 # access text language with text.get_language()
 # access text content with text.get_content() because they are objects now
@@ -944,17 +941,18 @@ def spacing():
     xMotor.run_timed(time_sp=timeT, speed_sp=speed)
     sleep(timeT/1000)
 
+
 # en-US
 # bg-BG
 @app.route('/message', methods=['POST'])
 def message():
     data = request.get_json()
-    if data and 'message' in data and len(data['message']) > 0 \
-            and 'language' in data and data['language'] == 'en-US' or data['language'] == 'bg-BG':
-        messages.put(Message(data['language'], data['message']))
-        return jsonify({'success': True, 'message': 'Message received.'})
-    else:
-        return jsonify({'success': False, 'message': 'Invalid request.'})
+    if data and 'message' in data and 'language' in data:
+        if len(data['message']) > 0 and data['language'] == 'en-US' or data['language'] == 'bg-BG':
+            print_message(data['message'], data['language'])
+            return jsonify({'success': True, 'message': 'Message received.'})
+
+    return jsonify({'success': False, 'message': 'Invalid request.'})
 
 
 @app.route('/')
@@ -963,5 +961,4 @@ def hello():
 
 
 if __name__ == "__main__":
-    # print_messages()
     app.run(host='0.0.0.0', ssl_context='adhoc', port=4000, threaded=False)
