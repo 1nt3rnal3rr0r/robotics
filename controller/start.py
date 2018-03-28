@@ -10,90 +10,98 @@ messages = queue.Queue()
 CORS(app)
 
 whiteApproximation = 180
-timeT = 300
+timeT = 1200
 speed = 100
 speedBackwards = -100
 
+lettersPrinted = 1
+lettersPerLine = 6
 
-xMotor = LargeMotor('outA')
+xMotor = LargeMotor('outC')
 yMotor = LargeMotor('outB')
-zMotor = MediumMotor('outC')
+zMotor = MediumMotor('outA')
 
 touchSensor = TouchSensor('inA')
 
-
+atBeginning = False
 
 def print_messages():
-    threading.Timer(1, print_messages).start()
-    isPrinting = False
+    global atBeginning
+
+   #go at the beginning of the page
+    beginningOfThePage()
 
     print("print_message")
-    if (not isPrinting):
-        printA()
-        isPrinting = True
 
-    while not messages.empty():
-        if(not isPrinting):
-            isPrinting = True
-            printA()
-            parseText(messages.get())
+    parseText("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
 def parseText(text):
+    global lettersPrinted
+
+
     for letter in text:
-        if(letter == 'a' or letter == 'A'):
-            printA()
-        if (letter == 'b' or letter == 'B'):
-            printB()
-        if (letter == 'c' or letter == 'C'):
-            printC()
-        if (letter == 'd' or letter == 'D'):
-            printD()
-        if (letter == 'e' or letter == 'E'):
-            printE()
-        if (letter == 'f' or letter == 'F'):
-            printF()
-        if (letter == 'g' or letter == 'G'):
-            printG()
-        if (letter == 'h' or letter == 'H'):
-            printH()
-        if (letter == 'i' or letter == 'I'):
-            printI()
-        if (letter == 'j' or letter == 'J'):
-            printJ()
-        if (letter == 'k' or letter == 'K'):
-            printK()
-        if (letter == 'l' or letter == 'L'):
-            printL()
-        if (letter == 'm' or letter == 'M'):
-            printM()
-        if (letter == 'n' or letter == 'N'):
-            printN()
-        if (letter == 'o' or letter == 'O'):
-            printO()
-        if (letter == 'p' or letter == 'P'):
-            printP()
-        if (letter == 'q' or letter == 'Q'):
-            printQ()
-        if (letter == 'r' or letter == 'R'):
-            printR()
-        if (letter == 's' or letter == 'S'):
-            printS()
-        if (letter == 't' or letter == 'T'):
-            printT()
-        if (letter == 'u' or letter == 'U'):
-            printU()
-        if (letter == 'v' or letter == 'V'):
-            printV()
-        if (letter == 'w' or letter == 'W'):
-            printW()
-        if (letter == 'x' or letter == 'X'):
-            printX()
-        if (letter == 'y' or letter == 'Y'):
-            printY()
-        if (letter == 'z' or letter == 'Z'):
-            printZ()
+        if (lettersPrinted % lettersPerLine == 0):
+            newLine()
+        else:
+            if(letter == 'a' or letter == 'A'):
+                printA()
+            if (letter == 'b' or letter == 'B'):
+                printB()
+            if (letter == 'c' or letter == 'C'):
+                printC()
+            if (letter == 'd' or letter == 'D'):
+                printD()
+            if (letter == 'e' or letter == 'E'):
+                printE()
+            if (letter == 'f' or letter == 'F'):
+                printF()
+            if (letter == 'g' or letter == 'G'):
+                printG()
+            if (letter == 'h' or letter == 'H'):
+                printH()
+            if (letter == 'i' or letter == 'I'):
+                printI()
+            if (letter == 'j' or letter == 'J'):
+                printJ()
+            if (letter == 'k' or letter == 'K'):
+                printK()
+            if (letter == 'l' or letter == 'L'):
+                printL()
+            if (letter == 'm' or letter == 'M'):
+                printM()
+            if (letter == 'n' or letter == 'N'):
+                printN()
+            if (letter == 'o' or letter == 'O'):
+                printO()
+            if (letter == 'p' or letter == 'P'):
+                printP()
+            if (letter == 'q' or letter == 'Q'):
+                printQ()
+            if (letter == 'r' or letter == 'R'):
+                printR()
+            if (letter == 's' or letter == 'S'):
+                printS()
+            if (letter == 't' or letter == 'T'):
+                printT()
+            if (letter == 'u' or letter == 'U'):
+                printU()
+            if (letter == 'v' or letter == 'V'):
+                printV()
+            if (letter == 'w' or letter == 'W'):
+                printW()
+            if (letter == 'x' or letter == 'X'):
+                printX()
+            if (letter == 'y' or letter == 'Y'):
+                printY()
+            if (letter == 'z' or letter == 'Z'):
+                printZ()
+        lettersPrinted += 1
         print(letter)
-    isPrinting = True
+
+def beginningOfThePage():
+    xMotor.run_timed(time_sp=timeT*14, speed_sp=speedBackwards)
+    sleep((timeT*14)/1000)
+
 
 def printA():
     #pen on paper
@@ -109,34 +117,46 @@ def printA():
     sleep(timeT/1000)
     xMotor.run_timed(time_sp=timeT, speed_sp=speed)
     sleep(timeT / 1000)
-    yMotor.run_timed(time_sp=timeT/6, speed_sp=speed)
-    sleep(timeT / 6000)
-    yMotor.run_timed(time_sp=timeT / 3 + timeT, speed_sp=speedBackwards)
-    sleep(timeT / 3000 + timeT)
-
-    #spacing
+    yMotor.run_timed(time_sp=timeT/4, speed_sp=speed)
+    sleep(timeT / 4000)
+    yMotor.run_timed(time_sp=timeT / 4 + timeT + timeT / 4, speed_sp=speedBackwards)
+    sleep(timeT / 4000 + timeT/1000 + timeT / 4000)
 
     #pen out of power
     penOutOfPaper()
+
+    # spacing
+    spacing()
+
     print ("A")
 
 def printB():
     # pen on paper
     penToPaper()
 
-    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    yMotor.run_timed(time_sp=timeT*2, speed_sp=speed)
+    sleep(timeT/500)
+    xMotor.run_timed(time_sp=timeT, speed_sp=speed)
     sleep(timeT/1000)
-    xMotor.run_timed(time_sp=timeT/2, speed_sp=speed)
-    sleep(timeT/2000)
     yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
     sleep(timeT/1000)
-    xMotor.run_timed(time_sp=timeT/2, speed_sp=speedBackwards)
-    sleep(timeT/2000)
-
-    # spacing
+    xMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
+    sleep(timeT / 1000)
+    xMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT/1000)
+    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
+    sleep(timeT / 1000)
+    xMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
+    sleep(timeT / 1000)
+    xMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT / 1000)
 
     # pen out of power
     penOutOfPaper()
+
+    # spacing
+    spacing()
+
     print ("B")
 
 def printC():
@@ -152,11 +172,15 @@ def printC():
     xMotor.run_timed(time_sp=timeT, speed_sp=speed)
     sleep(timeT / 1000)
 
-    # spacing
 
-    # pen out of power
+    #pen out of power
     penOutOfPaper()
+
+    # spacing
+    spacing()
     print ("C")
+
+
 
 def printD():
     # pen on paper
@@ -172,13 +196,15 @@ def printD():
     sleep(timeT / 2000)
     xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
     sleep(timeT / 2000)
-    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
-    sleep(timeT / 2000)
+    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT / 1000)
+
+
+    #pen out of power
+    penOutOfPaper()
 
     # spacing
-
-    # pen out of power
-    penOutOfPaper()
+    spacing()
     print ("D")
 
 def printE():
@@ -186,35 +212,38 @@ def printE():
     penToPaper()
 
     #-
-    xMotor.run_timed(time_sp=timeT / 3, speed_sp=speed)
-    sleep(timeT / 3000)
-    xMotor.run_timed(time_sp=timeT / 3, speed_sp=speedBackwards)
-    sleep(timeT / 3000)
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 2000)
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
 
     #|
-    yMotor.run_timed(time_sp=timeT / 3, speed_sp=speed)
-    sleep(timeT / 3000)
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
 
-    #-
-    xMotor.run_timed(time_sp=timeT / 3, speed_sp=speed)
-    sleep(timeT / 3000)
-    xMotor.run_timed(time_sp=timeT / 3, speed_sp=speedBackwards)
-    sleep(timeT / 3000)
+    # -
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 2000)
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
 
     # |
-    yMotor.run_timed(time_sp=timeT / 3, speed_sp=speed)
-    sleep(timeT / 3000)
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
 
     #-
-    xMotor.run_timed(time_sp=timeT / 3, speed_sp=speed)
-    sleep(timeT / 3000)
-    xMotor.run_timed(time_sp=timeT / 3, speed_sp=speedBackwards)
-    sleep(timeT / 3000)
+    # -
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 2000)
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
+
+
+    #pen out of power
+    penOutOfPaper()
 
     # spacing
-
-    # pen out of power
-    penOutOfPaper()
+    spacing()
     print ("E")
 
 def printF():
@@ -222,29 +251,31 @@ def printF():
     penToPaper()
 
     # -
-    xMotor.run_timed(time_sp=timeT / 3, speed_sp=speed)
-    sleep(timeT / 3000)
-    xMotor.run_timed(time_sp=timeT / 3, speed_sp=speedBackwards)
-    sleep(timeT / 3000)
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 2000)
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
 
     # |
-    yMotor.run_timed(time_sp=timeT / 3, speed_sp=speed)
-    sleep(timeT / 3000)
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 2000)
 
     # -
-    xMotor.run_timed(time_sp=timeT / 3, speed_sp=speed)
-    sleep(timeT / 3000)
-    xMotor.run_timed(time_sp=timeT / 3, speed_sp=speedBackwards)
-    sleep(timeT / 3000)
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 2000)
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
 
     # |
-    yMotor.run_timed(time_sp=timeT / 3, speed_sp=speed)
-    sleep(timeT / 3000)
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 2000)
+
+
+    #pen out of power
+    penOutOfPaper()
 
     # spacing
-
-    # pen out of power
-    penOutOfPaper()
+    spacing()
     print ("F")
 
 def printG():
@@ -266,19 +297,29 @@ def printG():
     #-
     xMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
     sleep(timeT / 2000)
-
-    #|
-    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
-    sleep(timeT / 2000)
-
-    #-
+    # -
     xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
     sleep(timeT / 2000)
 
-    # spacing
+    #|
+    yMotor.run_timed(time_sp=timeT , speed_sp=speedBackwards)
+    sleep(timeT / 1000)
+
+    #-
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
 
     # pen out of power
     penOutOfPaper()
+
+    # spacing
+    spacing()
+
+
+    # |
+    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
+    sleep(timeT / 1000)
+
     print ("G")
 
 def printH():
@@ -286,14 +327,14 @@ def printH():
     penToPaper()
 
     # |
-    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
     sleep(timeT / 1000)
     # |
-    yMotor.run_timed(time_sp=timeT/2, speed_sp=speedBackwards)
+    yMotor.run_timed(time_sp=timeT/2, speed_sp=speed)
     sleep(timeT / 2000)
     # -
-    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
-    sleep(timeT / 2000)
+    xMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT / 1000)
     # |
     yMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
     sleep(timeT / 2000)
@@ -301,26 +342,70 @@ def printH():
     yMotor.run_timed(time_sp=timeT, speed_sp=speed)
     sleep(timeT / 1000)
 
+
+    #pen out of power
+    penOutOfPaper()
+
     # spacing
     spacing()
-
-    # pen out of power
-    penOutOfPaper()
     print ("H")
 
 def printI():
     # pen on paper
     penToPaper()
 
-    # |
+    # -
+    print("-")
     yMotor.run_timed(time_sp=timeT, speed_sp=speed)
     sleep(timeT / 1000)
 
+    # pen out of power
+    print("pen out")
+    penOutOfPaper()
+
     # spacing
-    spacing()
+    print("spacing")
+    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
+    sleep(timeT/1000)
+
+    # pen in of power
+    print("pen out")
+    penOutOfPaper()
+
+    print ("I")
+
+def newLine():
+    # pen out of power
+    print("pen out")
+    zMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 2000)
+
+    xMotor.run_timed(time_sp=timeT*14, speed_sp=speedBackwards)
+    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
+    sleep(timeT / 1000*14)
+
+def printDot():
+    # pen on paper
+  #  penToPaper()
+
+    # .
+    print(".")
+    yMotor.run_timed(time_sp=timeT/12, speed_sp=speed)
+    sleep(timeT / 12000)
 
     # pen out of power
+    print("pen out")
     penOutOfPaper()
+
+    # spacing
+    print("spacing")
+    xMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT/1000)
+
+    # pen in of power
+    print("pen in")
+    penToPaper()
+
     print ("I")
 
 def printJ():
@@ -335,11 +420,12 @@ def printJ():
     xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
     sleep(timeT / 2000)
 
+
+    #pen out of power
+    penOutOfPaper()
+
     # spacing
     spacing()
-
-    # pen out of power
-    penOutOfPaper()
     print ("J")
 
 def printK():
@@ -347,13 +433,13 @@ def printK():
     penToPaper()
 
     # |
-    yMotor.run_timed(time_sp=timeT/2, speed_sp=speed)
+    yMotor.run_timed(time_sp=timeT/2, speed_sp=speedBackwards)
     sleep(timeT / 2000)
 
     # /
     xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
     yMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
-    sleep(timeT / 1000)
+    sleep(timeT / 2000)
 
     # /
     xMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
@@ -369,26 +455,47 @@ def printK():
     sleep(timeT / 2000)
 
     # \
-    printBackSlash()
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 2000)
+
+    # /
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 1000)
+
+
+    #pen out of power
+    penOutOfPaper()
 
     # spacing
     spacing()
-
-    # pen out of power
-    penOutOfPaper()
     print("K")
 
 def printL():
     # pen on paper
     penToPaper()
 
+    # -
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
+
+    # -
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 2000)
+
     # |
     yMotor.run_timed(time_sp=timeT, speed_sp=speed)
     sleep(timeT / 1000)
 
-    # -
-    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
-    sleep(timeT / 2000)
+    # |
+    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
+    sleep(timeT / 1000)
+
+
+
+    #pen out of power
+    penOutOfPaper()
 
     # spacing
     spacing()
@@ -418,10 +525,12 @@ def printM():
     sleep(timeT / 1000)
 
     # spacing
-    spacing()
 
-    # pen out of power
+    #pen out of power
     penOutOfPaper()
+
+    # spacing
+    spacing()
     print("M")
 
 def printN():
@@ -429,27 +538,28 @@ def printN():
     penToPaper()
 
     # |
-    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
     sleep(timeT / 1000)
 
     # |
-    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
+    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
     sleep(timeT / 1000)
 
     # \
     xMotor.run_timed(time_sp=timeT, speed_sp=speed)
-    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
     sleep(timeT / 1000)
 
     # |
     yMotor.run_timed(time_sp=timeT, speed_sp=speed)
     sleep(timeT / 1000)
 
+
+    #pen out of power
+    penOutOfPaper()
+
     # spacing
     spacing()
-
-    # pen out of power
-    penOutOfPaper()
     print("N")
 
 def printO():
@@ -457,7 +567,7 @@ def printO():
     penToPaper()
 
     # |
-    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
     sleep(timeT / 1000)
 
     # -
@@ -465,18 +575,19 @@ def printO():
     sleep(timeT / 1000)
 
     # |
-    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
+    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
     sleep(timeT / 1000)
 
     # -
     xMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
     sleep(timeT / 1000)
 
+
+    #pen out of power
+    penOutOfPaper()
+
     # spacing
     spacing()
-
-    # pen out of power
-    penOutOfPaper()
     print("O")
 
 def printP():
@@ -492,7 +603,7 @@ def printP():
     sleep(timeT / 2000)
 
     # |
-    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
     sleep(timeT / 2000)
 
     # -
@@ -500,14 +611,15 @@ def printP():
     sleep(timeT / 2000)
 
     # |
-    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
     sleep(timeT / 1000)
+
+
+    #pen out of power
+    penOutOfPaper()
 
     # spacing
     spacing()
-
-    # pen out of power
-    penOutOfPaper()
     print("P")
 
 def printQ():
@@ -535,35 +647,7 @@ def printR():
     # pen on paper
     penToPaper()
 
-    printP()
-
-    yMotor.run_timed(time_sp=timeT/2, speed_sp=speedBackwards)
-    sleep(timeT / 2000)
-
-    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
-    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
-    sleep(timeT / 2000)
-
-    # spacing
-    spacing()
-
-    # pen out of power
-    penOutOfPaper()
-    print("R")
-
-def printS():
-    # pen on paper
-    penToPaper()
-
-    #-
-    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
-    sleep(timeT / 2000)
-
-    #-
-    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
-    sleep(timeT / 2000)
-
-    #|
+    # |
     yMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
     sleep(timeT / 2000)
 
@@ -579,11 +663,69 @@ def printS():
     xMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
     sleep(timeT / 2000)
 
+    # |
+    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
+    sleep(timeT / 1000)
+
+
+
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
+
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 2000)
+
+
+    #pen out of power
+    penOutOfPaper()
+
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 2000)
+
     # spacing
     spacing()
+    print("R")
 
-    # pen out of power
+def printS():
+    # pen on paper
+    penToPaper()
+
+    #-
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 2000)
+
+    #-
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
+
+    #|
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
+
+    # -
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 2000)
+
+    # |
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
+
+    # -
+    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
+
+
+    #pen out of power
     penOutOfPaper()
+
+    # |
+    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT / 1000)
+
+    # spacing
+    spacing()
 
     print("S")
 
@@ -600,14 +742,19 @@ def printT():
     sleep(timeT / 2000)
 
     # |
+    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
+    sleep(timeT / 1000)
+
+
+    #pen out of power
+    penOutOfPaper()
+
+    # |
     yMotor.run_timed(time_sp=timeT, speed_sp=speed)
     sleep(timeT / 1000)
 
     # spacing
     spacing()
-
-    # pen out of power
-    penOutOfPaper()
     print("T")
 
 def printU():
@@ -615,7 +762,7 @@ def printU():
     penToPaper()
 
     # |
-    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
     sleep(timeT / 1000)
 
     # -
@@ -623,14 +770,15 @@ def printU():
     sleep(timeT / 2000)
 
     # |
-    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
+    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
     sleep(timeT / 1000)
+
+
+    #pen out of power
+    penOutOfPaper()
 
     # spacing
     spacing()
-
-    # pen out of power
-    penOutOfPaper()
     print("U")
 
 def printV():
@@ -639,7 +787,7 @@ def printV():
 
     # \
     xMotor.run_timed(time_sp=timeT, speed_sp=speed)
-    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
     sleep(timeT / 1000)
 
     #/
@@ -647,11 +795,12 @@ def printV():
     yMotor.run_timed(time_sp=timeT, speed_sp=speed)
     sleep(timeT / 1000)
 
+
+    #pen out of power
+    penOutOfPaper()
+
     # spacing
     spacing()
-
-    # pen out of power
-    penOutOfPaper()
     print("V")
 
 def printW():
@@ -676,12 +825,12 @@ def printW():
     yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
     sleep(timeT / 1000)
 
-    # spacing
-    spacing()
 
-    # pen out of power
+    #pen out of power
     penOutOfPaper()
 
+    # spacing
+    spacing()
     print("W")
 
 def printX():
@@ -708,11 +857,12 @@ def printX():
     yMotor.run_timed(time_sp=timeT, speed_sp=speed)
     sleep(timeT / 2000)
 
+
+    #pen out of power
+    penOutOfPaper()
+
     # spacing
     spacing()
-
-    # pen out of power
-    penOutOfPaper()
     print("X")
 
 def printY():
@@ -730,11 +880,12 @@ def printY():
     yMotor.run_timed(time_sp=timeT, speed_sp=speed)
     sleep(timeT / 1000)
 
+
+    #pen out of power
+    penOutOfPaper()
+
     # spacing
     spacing()
-
-    # pen out of power
-    penOutOfPaper()
 
     print("Y")
 
@@ -754,17 +905,14 @@ def printZ():
     xMotor.run_timed(time_sp=timeT, speed_sp=speed)
     sleep(timeT / 1000)
 
-    # spacing
-    spacing()
 
-    # pen out of power
+    #pen out of power
     penOutOfPaper()
 
+    # spacing
+    spacing()
     print("Z")
 
-def spacing():
-    xMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
-    sleep(timeT / 2000)
 
 def printBackSlash():
     # \
@@ -779,10 +927,19 @@ def printFrontSlash():
     sleep(timeT / 1000)
 
 def penToPaper():
-    zMotor.ramp_down_sp(0)
+    print()
+    zMotor.run_timed(time_sp=4*timeT, speed_sp=speedBackwards)
+    sleep(timeT/250)
 
 def penOutOfPaper():
-    zMotor.ramp_down_sp(30)
+    print()
+    zMotor.run_timed(time_sp=4 * timeT, speed_sp=speed)
+    sleep(timeT / 250)
+
+def spacing():
+    print()
+    xMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT/1000)
 
 @app.route('/message', methods=['POST'])
 def message():
