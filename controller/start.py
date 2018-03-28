@@ -4,8 +4,9 @@ import threading
 import queue
 from time import sleep
 from ev3dev.ev3 import *
+from message import Message
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='react_build', static_url_path='')
 messages = queue.Queue()
 CORS(app)
 
@@ -35,6 +36,8 @@ def print_messages():
 
     parseText("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
+# access text language with text.get_language()
+# access text content with text.get_content() because they are objects now
 def parseText(text):
     global lettersPrinted
 
@@ -941,13 +944,14 @@ def spacing():
     xMotor.run_timed(time_sp=timeT, speed_sp=speed)
     sleep(timeT/1000)
 
+# en-US
+# bg-BG
 @app.route('/message', methods=['POST'])
 def message():
     data = request.get_json()
     if data and 'message' in data and len(data['message']) > 0 \
-            and 'language' in data and len(data['language']) > 0:
-        print(data['language'])
-        messages.put(data['message'])
+            and 'language' in data and data['language'] == 'en-US' or data['language'] == 'bg-BG':
+        messages.put(Message(data['language'], data['message']))
         return jsonify({'success': True, 'message': 'Message received.'})
     else:
         return jsonify({'success': False, 'message': 'Invalid request.'})
@@ -955,9 +959,9 @@ def message():
 
 @app.route('/')
 def hello():
-    return 'Hello!'
+    return app.send_static_file('index.html')
 
 
 if __name__ == "__main__":
-    print_messages()
-    # app.run(host='0.0.0.0', ssl_context='adhoc', port=4000, threaded=True)
+    # print_messages()
+    app.run(host='0.0.0.0', ssl_context='adhoc', port=4000, threaded=True)
