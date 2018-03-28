@@ -6,6 +6,7 @@ from flask_cors import CORS
 import threading
 import queue
 from message import Message
+from time import sleep
 
 # import monobrick dll
 dir_path = os.path.dirname(os.path.realpath(__file__)) + '\libs'
@@ -14,7 +15,7 @@ clr.AddReference('MonoBrick')
 from MonoBrick import EV3
 
 
-brick = EV3.Brick[EV3.Sensor, EV3.Sensor, EV3.Sensor, EV3.Sensor]('usb')
+brick = EV3.Brick[EV3.Sensor, EV3.Sensor, EV3.Sensor, EV3.Sensor]('wifi')
 is_connected = False
 
 app = Flask(__name__, static_folder='react_build', static_url_path='')
@@ -64,19 +65,21 @@ def disconnect():
         print(str(e))
 
 
-def print_messages():
-    threading.Timer(1, print_messages).start()
-
-    if is_connected is False:
-        return
-
-    while not messages.empty():
-        msg = messages.get()
-        content = msg.get_content()
-        language = msg.get_language()
-        for char in content:
-            translated = translate_letter(char, language)
-            send_letter(translated)
+# def print_messages():
+#     # threading.Timer(1, print_messages).start()
+#
+#     if is_connected is False:
+#         return
+#
+#     send_letter('Z')
+#
+#     # while not messages.empty():
+#     #     msg = messages.get()
+#     #     content = msg.get_content()
+#     #     language = msg.get_language()
+#     #     for char in content:
+#     #         translated = translate_letter(char, language)
+#     #         send_letter(translated)
 
 
 @app.route('/message', methods=['POST'])
@@ -95,8 +98,17 @@ def hello():
     return app.send_static_file('index.html')
 
 
+def print_messages():
+    threading.Timer(1, print_messages).start()
+    print('start')
+    sleep(5)
+    print('end')
+
+
 if __name__ == "__main__":
-    connect()
+    # connect()
+    # print_messages()
+    # # app.run(host='0.0.0.0', ssl_context='adhoc', port=4000, threaded=True)
+    # disconnect()
+
     print_messages()
-    app.run(host='0.0.0.0', ssl_context='adhoc', port=4000, threaded=True)
-    disconnect()

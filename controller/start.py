@@ -29,7 +29,7 @@ def parseText(text):
 
     for letter in text:
         if (lettersPrinted % lettersPerLine == 0):
-            letters.newLine()
+            letter.newLine()
         else:
             if(letter == 'a' or letter == 'A'):
                 letters.printA()
