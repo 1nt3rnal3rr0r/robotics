@@ -5,7 +5,7 @@ from ev3dev.ev3 import *
 xMotor = LargeMotor('outC')
 yMotor = LargeMotor('outB')
 zMotor = MediumMotor('outA')
-touchSensor = TouchSensor('inA')
+touchSensor = TouchSensor('in2')
 
 
 
@@ -37,6 +37,9 @@ def printA():
     #pen out of power
     penOutOfPaper()
 
+    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT / 1000)
+
     # spacing
     spacing()
 
@@ -46,21 +49,19 @@ def printB():
     # pen on paper
     penToPaper()
 
-    yMotor.run_timed(time_sp=timeT*2, speed_sp=speed)
-    sleep(timeT/500)
-    xMotor.run_timed(time_sp=timeT, speed_sp=speed)
-    sleep(timeT/1000)
-    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
-    sleep(timeT/1000)
-    xMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
-    sleep(timeT / 1000)
-    xMotor.run_timed(time_sp=timeT, speed_sp=speed)
-    sleep(timeT/1000)
+    yMotor.run_timed(time_sp=timeT/2, speed_sp=speedBackwards)
+    sleep(timeT/2000)
+    xMotor.run_timed(time_sp=timeT/2, speed_sp=speed)
+    sleep(timeT/2000)
+    yMotor.run_timed(time_sp=timeT/2, speed_sp=speed)
+    sleep(timeT/2000)
+    xMotor.run_timed(time_sp=timeT/2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
     yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
     sleep(timeT / 1000)
-    xMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
-    sleep(timeT / 1000)
-    xMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    xMotor.run_timed(time_sp=timeT/2, speed_sp=speed)
+    sleep(timeT / 2000)
+    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
     sleep(timeT / 1000)
 
     # pen out of power
@@ -95,6 +96,9 @@ def printC():
 
 
 def printD():
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
+    sleep(timeT / 2000)
+
     # pen on paper
     penToPaper()
 
@@ -153,6 +157,11 @@ def printE():
 
     #pen out of power
     penOutOfPaper()
+
+    # |
+    yMotor.run_timed(time_sp=timeT, speed_sp=speed)
+    sleep(timeT / 1000)
+
 
     # spacing
     spacing()
@@ -388,6 +397,10 @@ def printL():
     # pen on paper
     penToPaper()
 
+    # |
+    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
+    sleep(timeT / 1000)
+
     # -
     xMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
     sleep(timeT / 2000)
@@ -399,11 +412,6 @@ def printL():
     # |
     yMotor.run_timed(time_sp=timeT, speed_sp=speed)
     sleep(timeT / 1000)
-
-    # |
-    yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
-    sleep(timeT / 1000)
-
 
 
     #pen out of power
@@ -560,7 +568,7 @@ def printR():
     penToPaper()
 
     # |
-    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speedBackwards)
     sleep(timeT / 2000)
 
     # -
@@ -579,6 +587,9 @@ def printR():
     yMotor.run_timed(time_sp=timeT, speed_sp=speedBackwards)
     sleep(timeT / 1000)
 
+    # |
+    yMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
+    sleep(timeT / 2000)
 
 
     xMotor.run_timed(time_sp=timeT / 2, speed_sp=speed)
@@ -840,16 +851,18 @@ def printFrontSlash():
 
 def penToPaper():
     print()
-    zMotor.run_timed(time_sp=4*timeT, speed_sp=speedBackwards)
-    sleep(timeT/250)
+    while(not touchSensor.is_pressed):
+        zMotor.run_timed(time_sp=timeT/4, speed_sp=speedBackwards)
+        sleep(timeT / 4000)
+
 
 def penOutOfPaper():
     print()
-    zMotor.run_timed(time_sp=4 * timeT, speed_sp=speed)
-    sleep(timeT / 250)
+    zMotor.run_timed(time_sp=3 * timeT, speed_sp=speed)
+    sleep(timeT / 333)
 
 def spacing():
-    print()
+    print("spacing")
     xMotor.run_timed(time_sp=timeT, speed_sp=speed)
     sleep(timeT/1000)
 
