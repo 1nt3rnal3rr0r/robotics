@@ -11,15 +11,32 @@ lettersPerLine = 6
 
 atBeginning = False
 
+alphabet = {'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ж': 'j', 'з': 'z',
+            'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o', 'п': 'p',
+            'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h', 'ц': 'c', 'ч': 'ch',
+            'ш': 'sh', 'щ': 'sht', 'ъ': 'u', 'ь': 'i', 'ю': 'iu', 'я': 'ya'}
+BG = 'bg-BG'
+EN = 'en-US'
 
-def print_message(msg, lang):
+
+def translate_msg(msg, lang):
+    if lang == BG:
+        translated = ""
+        for char in msg:
+            translated += alphabet[char].lower()
+        return translated
+    else:
+        return msg
+
+
+def print_message(msg):
     global atBeginning
 
     print(msg)
 
     # go at the beginning of the page
     letters.beginningOfThePage()
-    #print('print_message')
+    print('print_message')
 
     parse_text(msg)
 
@@ -92,9 +109,9 @@ def parse_text(text):
 def message():
     data = request.get_json()
     if data and 'message' in data and 'language' in data:
-        if len(data['message']) > 0 and data['language'] == 'en-US' or data['language'] == 'bg-BG':
-            letters.penOutOfPaper()
-            #print_message(data['message'], data['language'])
+        if len(data['message']) > 0 and data['language'] == EN or data['language'] == BG:
+            translated = translate_msg(data['message'], data['language'])
+            print_message(translated)
             return jsonify({'success': True, 'message': 'Message received.'})
 
     return jsonify({'success': False, 'message': 'Invalid request.'})
@@ -106,7 +123,4 @@ def hello():
 
 
 if __name__ == "__main__":
-    #letters.penOutOfPaper()
-    #app.run(host='0.0.0.0', ssl_context='adhoc', port=4000, threaded=False)
-    print_message("HELLO NBU  STUDENT", "EN")
-    #letters.penToPaper()
+    app.run(host='0.0.0.0', ssl_context=('cert.pem', 'key.pem'), port=4000, threaded=False)
